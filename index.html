@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thewald :: capability server</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --bg2:#161b22;
+    --line:#30363d;
+    --text:#c9d1d9;
+    --muted:#8b949e;
+    --accent:#58a6ff;
+    --green:#3fb950;
+    --amber:#d29922;
+    --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: var(--mono);
+    line-height:1.55;
+    padding: 32px 16px 80px;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  .topbar{
+    display:flex; align-items:center; gap:10px; margin-bottom: 28px;
+    color:var(--muted); font-size: 13px;
+  }
+  .dot{width:9px;height:9px;border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green);}
+  h1{
+    font-size: 22px; margin: 0 0 4px; color:#fff;
+    font-weight: 600;
+  }
+  .sub{ color:var(--muted); font-size: 14px; margin-bottom: 28px;}
+  .sub a{color:var(--accent); text-decoration:none;}
+  .block{
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .block-label{
+    font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  pre{
+    margin:0; white-space: pre-wrap; word-break: break-word;
+    font-size: 13px; color: var(--text);
+  }
+  .key{color:#79c0ff;}
+  .str{color:#a5d6ff;}
+  .punct{color:var(--muted);}
+
+  .tool{
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    background: var(--bg2);
+    transition: border-color .15s ease;
+  }
+  .tool:hover{ border-color: var(--accent); }
+  .tool-name{
+    color: #fff; font-size: 15px; font-weight: 600; margin: 0 0 6px;
+  }
+  .tool-name .ns{color:var(--muted); font-weight: 400;}
+  .tool-desc{ margin: 0 0 10px; font-size: 13.5px; }
+  .tool-meta{ font-size: 12.5px; color: var(--muted); margin: 4px 0; }
+  .tool-meta b{ color: var(--amber); font-weight:600; }
+  .invoke-btn{
+    margin-top: 10px;
+    display:inline-block;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .invoke-btn:hover{ background: rgba(88,166,255,.12); }
+
+  #contact{
+    scroll-margin-top: 20px;
+  }
+  .contact-title{ color:#fff; font-size: 17px; margin: 0 0 4px; }
+  .selected-tool{
+    font-size: 12.5px; color: var(--green); margin-bottom: 16px; min-height: 16px;
+  }
+  label{ display:block; font-size: 12.5px; color: var(--muted); margin: 14px 0 6px; }
+  input, textarea, select{
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+  }
+  input:focus, textarea:focus, select:focus{ outline: 1px solid var(--accent); border-color: var(--accent); }
+  textarea{ min-height: 110px; resize: vertical; }
+  .submit-btn{
+    margin-top: 18px;
+    background: var(--green);
+    border: none;
+    color: #0d1117;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .submit-btn:hover{ filter: brightness(1.08); }
+  .success{
+    display:none;    background: rgba(63,185,80,.1);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 14px 16px;
+    border-radius: 6px;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+  footer{
+    margin-top: 36px;
+    color: var(--muted);
+    font-size: 11.5px;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  footer a{color:var(--muted);}
+  .limitation{
+    font-size: 12.5px; color: var(--muted); margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar"><span class="dot"></span> server status: available</div>
+
+  <h1>mcp://thewald</h1>
+  <div class="sub">Ein Katalog aufrufbarer Fähigkeiten statt eines Lebenslaufs. <br>20 Jahre Telco / Cloud / GenAI &mdash; Tandem-Technologiestratege. <a href="#contact">Direkt anfragen ↓</a></div>
+
+  <div class="block">
+    <div class="block-label">server.describe()</div>
+    <pre><span class="key">"name"</span><span class="punct">:</span> <span class="str">"thewald"</span><span class="punct">,</span>
+<span class="key">"role"</span><span class="punct">:</span> <span class="str">"Technology Strategist — tandem model"</span><span class="punct">,</span>
+<span class="key">"domains"</span><span class="punct">:</span> <span class="str">["cloud", "telco", "GenAI", "standards", "enablement"]</span><span class="punct">,</span>
+<span class="key">"operatingMode"</span><span class="punct">:</span> <span class="str">"influence without direct-line authority"</span><span class="punct">,</span>
+<span class="key">"status"</span><span class="punct">:</span> <span class="str">"open to new invocations"</span></pre>
+  </div>
+
+  <div class="block-label" style="margin:26px 0 12px;">available tools</div>
+
+  <div class="tool">
+    <p class="tool-name"><span class="ns">thewald::</span>tandem_deal_architect</p>
+    <p class="tool-desc">Entwirft die technische Strategie hinter komplexen, mehrstelligen Millionen-Deals — im Tandem mit einem Vertriebs-/Account-Partner, nie solo.</p>
+    <p class="tool-meta"><b>bestInvokedWhen</b> — ein Deal braucht technische Tiefe UND kommerzielles Momentum gleichzeitig, aber niemand deckt beides glaubwürdig ab</p>
+    <p class="tool-meta"><b>evidence</b> — Account CTO @ Microsoft (Tandem mit Client Director); CTO Telco Western Europe (Tandem mit Industry Lead)</p>
+    <button class="invoke-btn" data-tool="tandem_deal_architect">invoke →</button>
+  </div>
+
+  <div class="tool">
+    <p class="tool-name"><span class="ns">thewald::</span>standards_consensus_broker</p>
+    <p class="tool-desc">Bewegt konkurrierende Parteien zu einer gemeinsamen technischen Linie — ganz ohne Weisungsbefugnis.</p>
+    <p class="tool-meta"><b>bestInvokedWhen</b> — mehrere Firmen/Abteilungen müssen sich auf einen Standard, eine Architektur oder ein Framework einigen</p>
+    <p class="tool-meta"><b>evidence</b> — ETSI TISPAN Vice-Chair (jüngstes je gewähltes Mitglied)</p>
+    <button class="invoke-btn" data-tool="standards_consensus_broker">invoke →</button>
+  </div>
+
+  <div class="tool">
+    <p class="tool-name"><span class="ns">thewald::</span>ecosystem_scaler</p>
+    <p class="tool-desc">Baut und skaliert Partner-Ökosysteme (Hyperscaler, ISV, GSI) von Null auf ein funktionierendes Go-to-Market-System.</p>
+    <p class="tool-meta"><b>bestInvokedWhen</b> — ein Unternehmen hat ein Produkt, aber kein Partner-Netzwerk, das es trägt</p>
+    <p class="tool-meta"><b>evidence</b> — Azure Business Lead, Cloud Delivery Specialist (Seattle)</p>
+    <button class="invoke-btn" data-tool="ecosystem_scaler">invoke →</button>
+  </div>
+
+  <div class="tool">
+    <p class="tool-name"><span class="ns">thewald::</span>sector_builder_from_zero</p>
+    <p class="tool-desc">Entwickelt aus eigener Initiative eine neue Marktstrategie, bringt sie zur Freigabe durch die Führung und übernimmt den Aufbau.</p>
+    <p class="tool-meta"><b>bestInvokedWhen</b> — ein neues, noch unbesetztes Marktsegment existiert, aber niemand hat den ersten Entwurf gemacht</p>
+    <p class="tool-meta"><b>evidence</b> — eigenständig entwickelte Markteintrittsstrategie für einen neuen Industriesektor, von der Geschäftsführung freigegeben</p>
+    <button class="invoke-btn" data-tool="sector_builder_from_zero">invoke →</button>
+  </div>
+
+  <div class="tool">
+    <p class="tool-name"><span class="ns">thewald::</span>bleeding_edge_scout</p>
+    <p class="tool-desc">Übersetzt neue Technologiewellen (Cloud → GenAI) in belastbare Geschäftsstrategie, bevor der Markt sie breit verstanden hat.</p>
+    <p class="tool-meta"><b>bestInvokedWhen</b> — eine neue Technologie entsteht und niemand im Haus kann sie glaubwürdig auf Geschäftsrelevanz herunterbrechen</p>
+    <p class="tool-meta"><b>evidence</b> — GenAI-Zertifizierung, durchgängige Cloud→KI-Laufbahn seit T-Systems</p>
+    <button class="invoke-btn" data-tool="bleeding_edge_scout">invoke →</button>
+  </div>
+
+  <div class="tool">
+    <p class="tool-name"><span class="ns">thewald::</span>enablement_coach</p>
+    <p class="tool-desc">Macht aus Einzelpersonen und Teams eigenständig handlungsfähige Profis — als Nebenwirkung jeder Rolle, nicht als Zusatzaufgabe.</p>
+    <p class="tool-meta"><b>bestInvokedWhen</b> — Wissen sitzt bei zu wenigen Köpfen und muss skaliert werden</p>
+    <p class="tool-meta"><b>evidence</b> — Gastdozent an einer Universität; Kernmotivation: "dass andere durch mich vorangekommen sind"</p>
+    <button class="invoke-btn" data-tool="enablement_coach">invoke →</button>
+  </div>
+
+  <div class="tool">
+    <p class="tool-name"><span class="ns">thewald::</span>exec_trust_broker</p>
+    <p class="tool-desc">Baut auf C-Level Vertrauen über Organisationsgrenzen hinweg auf und hält es auch unter Druck.</p>
+    <p class="tool-meta"><b>bestInvokedWhen</b> — eine Initiative braucht Rückendeckung von Leuten, die dir nicht unterstellt sind</p>
+    <p class="tool-meta"><b>evidence</b> — CTO-Rollen in internationalen Konzernstrukturen, Mitglied diverser Executive-Steering-Gremien</p>
+    <button class="invoke-btn" data-tool="exec_trust_broker">invoke →</button>
+  </div>
+
+  <p class="limitation">knownLimitation: kein Interesse an Tools, die reine Projektlieferung/Legacy-Betrieb oder klassische Vertriebsquote abdecken.</p>
+
+  <div class="block" id="contact" style="margin-top:36px;">
+    <p class="contact-title">server.invoke()</p>
+    <p class="selected-tool" id="selectedToolLabel"></p>
+
+    <form id="mcpForm" action="https://formspree.io/f/thilo.ewald+mcp@gmail.com" method="POST">
+      <input type="hidden" name="tool" id="toolField" value="general_inquiry">
+      <input type="hidden" name="_subject" id="subjectField" value="Neue Anfrage über mcp://thewald">
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="company">Unternehmen</label>
+      <input type="text" id="company" name="company">
+
+      <label for="email">E-Mail</label>
+      <input type="email" id="email" name="_replyto" required>
+
+      <label for="message">Nachricht</label>
+      <textarea id="message" name="message" placeholder="Worum geht es? Welche Rolle, welcher Kontext?" required></textarea>
+
+      <button type="submit" class="submit-btn">senden</button>
+      <div class="success" id="successMsg">Danke — die Anfrage ist raus. Ich melde mich.</div>
+    </form>
+  </div>
+
+  <footer>
+    Kontakt: Thilo Ewald · Anfragen laufen über das Formular oben.<br>
+    Diese Seite ist eine private, nicht-kommerzielle Übersicht beruflicher Fähigkeiten — kein Angebot im geschäftlichen Sinne.
+  </footer>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.invoke-btn');
+  const toolField = document.getElementById('toolField');
+  const subjectField = document.getElementById('subjectField');
+  const label = document.getElementById('selectedToolLabel');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tool = btn.getAttribute('data-tool');
+      toolField.value = tool;
+      subjectField.value = 'Anfrage zu thewald::' + tool;
+      label.textContent = 'Ausgewähltes Tool: ' + tool;
+      document.getElementById('contact').scrollIntoView({behavior:'smooth'});
+      document.getElementById('name').focus();
+    });
+  });
+
+  const form = document.getElementById('mcpForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.reset();
+        document.getElementById('successMsg').style.display = 'block';
+      } else {
+        alert('Senden fehlgeschlagen — bitte direkt per Mail: thilo.ewald+mcp@gmail.com');
+      }
+    } catch (err) {
+      alert('Senden fehlgeschlagen — bitte direkt per Mail: thilo.ewald+mcp@gmail.com');
+    }
+  });
+</script>
+</body>
+</html>
