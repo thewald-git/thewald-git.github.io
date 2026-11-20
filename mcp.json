@@ -1,0 +1,64 @@
+{
+  "_note": "Illustrative capability manifest — not a functional MCP server definition. This JSON mirrors the content shown at https://thewald-git.github.io/ for anyone who'd rather parse data than read a page. See README.md.",
+  "name": "thewald",
+  "version": "1.0.0",
+  "role": "Technology Strategist — tandem model",
+  "domains": [
+    "cloud",
+    "telco",
+    "GenAI",
+    "standards",
+    "enablement"
+  ],
+  "operatingMode": "influence without direct-line authority",
+  "status": "open to new invocations",
+  "tools": [
+    {
+      "name": "tandem_deal_architect",
+      "description": "Entwirft die technische Strategie hinter komplexen, mehrstelligen Millionen-Deals — im Tandem mit einem Vertriebs-/Account-Partner, nie solo.",
+      "bestInvokedWhen": "ein Deal braucht technische Tiefe UND kommerzielles Momentum gleichzeitig, aber niemand deckt beides glaubwürdig ab",
+      "evidence": "Account CTO @ Microsoft (Tandem mit Client Director); CTO Telco Western Europe (Tandem mit Industry Lead)"
+    },
+    {
+      "name": "standards_consensus_broker",
+      "description": "Bewegt konkurrierende Parteien zu einer gemeinsamen technischen Linie — ganz ohne Weisungsbefugnis.",
+      "bestInvokedWhen": "mehrere Firmen/Abteilungen müssen sich auf einen Standard, eine Architektur oder ein Framework einigen",
+      "evidence": "ETSI TISPAN Vice-Chair (jüngstes je gewähltes Mitglied)"
+    },
+    {
+      "name": "ecosystem_scaler",
+      "description": "Baut und skaliert Partner-Ökosysteme (Hyperscaler, ISV, GSI) von Null auf ein funktionierendes Go-to-Market-System.",
+      "bestInvokedWhen": "ein Unternehmen hat ein Produkt, aber kein Partner-Netzwerk, das es trägt",
+      "evidence": "Azure Business Lead, Cloud Delivery Specialist (Seattle)"
+    },
+    {
+      "name": "sector_builder_from_zero",
+      "description": "Entwickelt aus eigener Initiative eine neue Marktstrategie, bringt sie zur Freigabe durch die Führung und übernimmt den Aufbau.",
+      "bestInvokedWhen": "ein neues, noch unbesetztes Marktsegment existiert, aber niemand hat den ersten Entwurf gemacht",
+      "evidence": "eigenständig entwickelte Markteintrittsstrategie für einen neuen Industriesektor, von der Geschäftsführung freigegeben"
+    },
+    {
+      "name": "bleeding_edge_scout",
+      "description": "Übersetzt neue Technologiewellen (Cloud → GenAI) in belastbare Geschäftsstrategie, bevor der Markt sie breit verstanden hat.",
+      "bestInvokedWhen": "eine neue Technologie entsteht und niemand im Haus kann sie glaubwürdig auf Geschäftsrelevanz herunterbrechen",
+      "evidence": "GenAI-Zertifizierung, durchgängige Cloud→KI-Laufbahn seit T-Systems"
+    },
+    {
+      "name": "enablement_coach",
+      "description": "Macht aus Einzelpersonen und Teams eigenständig handlungsfähige Profis — als Nebenwirkung jeder Rolle, nicht als Zusatzaufgabe.",
+      "bestInvokedWhen": "Wissen sitzt bei zu wenigen Köpfen und muss skaliert werden",
+      "evidence": "Gastdozent an einer Universität; Kernmotivation: \"dass andere durch mich vorangekommen sind\""
+    },
+    {
+      "name": "exec_trust_broker",
+      "description": "Baut auf C-Level Vertrauen über Organisationsgrenzen hinweg auf und hält es auch unter Druck.",
+      "bestInvokedWhen": "eine Initiative braucht Rückendeckung von Leuten, die dir nicht unterstellt sind",
+      "evidence": "CTO-Rollen in internationalen Konzernstrukturen, Mitglied diverser Executive-Steering-Gremien"
+    }
+  ],
+  "knownLimitation": "kein Interesse an Tools, die reine Projektlieferung/Legacy-Betrieb oder klassische Vertriebsquote abdecken",
+  "contact": {
+    "method": "mailto",
+    "address": "thilo.ewald+mcp@gmail.com"
+  }
+}
