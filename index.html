@@ -225,6 +225,7 @@
     <form id="mcpForm" action="https://formspree.io/f/thilo.ewald+mcp@gmail.com" method="POST">
       <input type="hidden" name="tool" id="toolField" value="general_inquiry">
       <input type="hidden" name="_subject" id="subjectField" value="Neue Anfrage über mcp://thewald">
+      <input type="hidden" name="_next" value="https://thewald-git.github.io/?sent=1#contact">
 
       <label for="name">Name</label>
       <input type="text" id="name" name="name" required>
@@ -266,26 +267,13 @@
     });
   });
 
-  const form = document.getElementById('mcpForm');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        form.reset();
-        document.getElementById('successMsg').style.display = 'block';
-      } else {
-        alert('Senden fehlgeschlagen — bitte direkt per Mail: thilo.ewald+mcp@gmail.com');
-      }
-    } catch (err) {
-      alert('Senden fehlgeschlagen — bitte direkt per Mail: thilo.ewald+mcp@gmail.com');
-    }
-  });
+  // Nach einer echten Formular-Übermittlung leitet Formspree auf _next zurück;
+  // wir erkennen das am Query-Parameter und zeigen die Erfolgsmeldung an.
+  if (new URLSearchParams(window.location.search).get('sent') === '1') {
+    document.getElementById('successMsg').style.display = 'block';
+    document.getElementById('contact').scrollIntoView({behavior:'instant'});
+    history.replaceState(null, '', window.location.pathname + '#contact');
+  }
 </script>
 </body>
 </html>
