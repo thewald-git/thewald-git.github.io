@@ -222,10 +222,8 @@
     <p class="contact-title">server.invoke()</p>
     <p class="selected-tool" id="selectedToolLabel"></p>
 
-    <form id="mcpForm" action="https://formspree.io/f/thilo.ewald+mcp@gmail.com" method="POST">
-      <input type="hidden" name="tool" id="toolField" value="general_inquiry">
-      <input type="hidden" name="_subject" id="subjectField" value="Neue Anfrage über mcp://thewald">
-      <input type="hidden" name="_next" value="https://thewald-git.github.io/?sent=1#contact">
+    <form id="mcpForm">
+      <input type="hidden" id="toolField" value="general_inquiry">
 
       <label for="name">Name</label>
       <input type="text" id="name" name="name" required>
@@ -239,8 +237,8 @@
       <label for="message">Nachricht</label>
       <textarea id="message" name="message" placeholder="Worum geht es? Welche Rolle, welcher Kontext?" required></textarea>
 
-      <button type="submit" class="submit-btn">senden</button>
-      <div class="success" id="successMsg">Danke — die Anfrage ist raus. Ich melde mich.</div>
+      <button type="submit" class="submit-btn">senden (öffnet dein Mailprogramm)</button>
+      <div class="success" id="successMsg">Dein Mailprogramm sollte sich jetzt öffnen — bitte die Mail dort noch absenden.</div>
     </form>
   </div>
 
@@ -253,27 +251,44 @@
 <script>
   const buttons = document.querySelectorAll('.invoke-btn');
   const toolField = document.getElementById('toolField');
-  const subjectField = document.getElementById('subjectField');
   const label = document.getElementById('selectedToolLabel');
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const tool = btn.getAttribute('data-tool');
       toolField.value = tool;
-      subjectField.value = 'Anfrage zu thewald::' + tool;
       label.textContent = 'Ausgewähltes Tool: ' + tool;
       document.getElementById('contact').scrollIntoView({behavior:'smooth'});
       document.getElementById('name').focus();
     });
   });
 
-  // Nach einer echten Formular-Übermittlung leitet Formspree auf _next zurück;
-  // wir erkennen das am Query-Parameter und zeigen die Erfolgsmeldung an.
-  if (new URLSearchParams(window.location.search).get('sent') === '1') {
+  // Kein Backend nötig: baut aus den Eingaben einen mailto:-Link und öffnet
+  // damit das Mailprogramm des Besuchers mit vorausgefüllter Nachricht.
+  const form = document.getElementById('mcpForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const tool = toolField.value;
+    const name = document.getElementById('name').value;
+    const company = document.getElementById('company').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    const subject = 'Anfrage zu thewald::' + tool;
+    const body =
+      'Name: ' + name + '\n' +
+      'Unternehmen: ' + (company || '-') + '\n' +
+      'E-Mail: ' + email + '\n' +
+      'Tool: thewald::' + tool + '\n\n' +
+      message;
+
+    const mailto = 'mailto:thilo.ewald+mcp@gmail.com'
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+
     document.getElementById('successMsg').style.display = 'block';
-    document.getElementById('contact').scrollIntoView({behavior:'instant'});
-    history.replaceState(null, '', window.location.pathname + '#contact');
-  }
+    window.location.href = mailto;
+  });
 </script>
 </body>
 </html>
